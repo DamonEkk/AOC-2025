@@ -28,26 +28,27 @@ func Get_battery(adventInput string)int{
 
 func Get_line_num(line string)int{
 	
-	var firstValue byte = '0'
-	firstPosition := 0
-	var secondValue byte = '0'
+	
+	// I need to find the highest digit with x minimal spots. Could reverse search and cut it down limit being how many digits we need. / up to previous digit.
 
-	for i := 0; i < len(line) - 1; i++{
-		if (line[i] > firstValue){
-			firstValue = line[i]
-			firstPosition = i
+	previousIndex := -1
+	finalNum := ""
+
+	for remaindingDigits := 12; remaindingDigits > 0; remaindingDigits--{
+		tempIndex := 0
+		var tempNum byte = '0'
+		for k:= len(line) - remaindingDigits; k > previousIndex; k--{
+			if (tempNum <= line[k]){
+				tempNum = line[k]
+				tempIndex = k
+			}	
 		}
+		previousIndex = tempIndex
+		finalNum += string(tempNum)
 	}
 
-	for i := firstPosition + 1; i < len(line); i++{
-		if (line[i] > secondValue){
-			secondValue = line[i]
-		}
-	}
+	convertNum, _ := strconv.Atoi(finalNum)
 
-	combinedValue := string([]byte{firstValue, secondValue})
+	return convertNum
 
-	finalVal, _ := strconv.Atoi(combinedValue)
-
-	return finalVal
 }
